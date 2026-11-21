@@ -1,0 +1,18 @@
+Falsifies `address_space_layout::verification::runtime_window_refuses_every_virtual_address_its_doc_forbids`.
+
+The defect: `runtime_window` checks against a band with no upper end, so an address above `RUNTIME_WINDOWS` is accepted.
+
+Expected to fail: the harness's `refused_inputs_never_reach_here` loop is reached, an unwinding failure, for an address above the band.
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -266,7 +266,7 @@
+ /// **A runtime window's address, checked against the map at compile time.** As [`pair_page`], for
+ /// [`RUNTIME_WINDOWS`].
+ pub const fn runtime_window(virtual_address: u64) -> u64 {
+-    window(RUNTIME_WINDOWS, virtual_address, PAGE_BYTES)
++    window(Band { start: RUNTIME_WINDOWS.start, end: u64::MAX }, virtual_address, PAGE_BYTES)
+ }
+ 
+ /// **Where the initial ramdisk archive is mapped**, read-only, before a program's `_start` runs: a

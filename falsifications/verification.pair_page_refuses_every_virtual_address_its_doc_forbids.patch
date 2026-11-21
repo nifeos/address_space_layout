@@ -1,0 +1,18 @@
+Falsifies `address_space_layout::verification::pair_page_refuses_every_virtual_address_its_doc_forbids`.
+
+The defect: `pair_page` rounds an unaligned address down instead of refusing it.
+
+Expected to fail: the harness's `refused_inputs_never_reach_here` loop is reached, an unwinding failure, for an unaligned address inside `PAIR_PAGES`.
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -260,7 +260,7 @@
+ /// in the source; what the call adds is that an address outside [`PAIR_PAGES`], or not page
+ /// aligned, stops the build instead of colliding with a runtime page at run time.
+ pub const fn pair_page(virtual_address: u64) -> u64 {
+-    window(PAIR_PAGES, virtual_address, PAGE_BYTES)
++    window(PAIR_PAGES, virtual_address & !(PAGE_BYTES - 1), PAGE_BYTES)
+ }
+ 
+ /// **A runtime window's address, checked against the map at compile time.** As [`pair_page`], for

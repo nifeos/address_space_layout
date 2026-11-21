@@ -1,0 +1,18 @@
+Falsifies `address_space_layout::verification::service_window_refuses_every_virtual_address_its_doc_forbids`.
+
+The defect: `service_window` checks against a band one page too wide, so the first page past `SERVICE_WINDOWS` is accepted.
+
+Expected to fail: the harness's `refused_inputs_never_reach_here` loop is reached, an unwinding failure, at `SERVICE_WINDOWS.end`.
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -277,7 +277,7 @@
+ /// **A service window's address, checked against the map at compile time.** As [`pair_page`], for
+ /// [`SERVICE_WINDOWS`].
+ pub const fn service_window(virtual_address: u64) -> u64 {
+-    window(SERVICE_WINDOWS, virtual_address, PAGE_BYTES)
++    window(Band { start: SERVICE_WINDOWS.start, end: SERVICE_WINDOWS.end + PAGE_BYTES }, virtual_address, PAGE_BYTES)
+ }
+ 
+ /// **Why an image does not fit the map.** Both variants name the numbers a reader needs to fix the
