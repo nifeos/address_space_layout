@@ -59,7 +59,7 @@ println!("{refusal}");
 Eleven Kani harnesses state the layout per address and per window:
 
 - `every_virtual_address_below_the_ceiling_lies_in_exactly_one_band`: every address below 2 GiB is in one
-  band and no address above it is in any, each band is page aligned, and the whole map lies in the
+  band and no address above it is in any, each band is page aligned, and the whole layout lies in the
   user half of all three architectures.
 - `the_bands_are_listed_in_virtual_address_order`: `BANDS` is in address order.
 - `pair_page_accepts_every_page_of_its_band`, `runtime_window_accepts_every_page_of_its_band` and
@@ -74,10 +74,19 @@ Eleven Kani harnesses state the layout per address and per window:
 - `check_image_places_exactly_what_the_image_band_holds`: for every pair of bounds, `check_image`
   places the image, calls it too large, or calls it outside the band, as its documentation says.
 
-Each harness has a falsification record at
-`falsifications/<module>.<harness>.patch`. Applying it with `git apply -p1` from the crate root
-makes that harness fail at its own assertion, which shows the proof checks something. The patches
-need a git checkout, and you revert each one with `git checkout -- src` before the next.
+Each harness has a falsification record at `falsifications/verification.<harness>.patch`, where
+`verification` is the module that holds the harnesses. Applying one makes its harness fail at its
+own assertion, which shows the proof checks something. From the crate root of a git checkout:
+
+```sh
+git apply -p1 falsifications/verification.pair_page_accepts_every_page_of_its_band.patch
+cargo kani --harness verification::pair_page_accepts_every_page_of_its_band --exact
+git checkout -- src
+```
+
+The second command is the expected red. It names the failed check, here `a window must lie wholly
+inside its band`, and ends with `VERIFICATION:- FAILED` and a summary of 0 verified harnesses and
+1 failure. The third command reverts the patch; revert each one before the next.
 
 Not proven: that two windows in one band do not overlap. The crate that places them asserts that.
 
@@ -113,7 +122,10 @@ usual way to get one) and a git checkout. From the crate root:
   fifteen seconds on one development machine, most of it compiling. A passing run prints a long
   list of checks, some marked `UNREACHABLE` or `SUCCESS` for standard library code, and one summary
   line per harness; only the final `VERIFICATION:- SUCCESSFUL` and the line `Complete - 11
-  successfully verified harnesses` matter.
+  successfully verified harnesses` matter. The four harnesses that prove a refusal end with
+  `SUCCESSFUL (encountered one or more panics as expected)`, because the refusal is a panic.
+- To run one harness, name it with its module: `cargo kani --harness
+  verification::<harness> --exact`.
 
 ## BUGS
 
@@ -128,11 +140,12 @@ usual way to get one) and a git checkout. From the crate root:
   randomizing system offers an attacker's guess.
 - Other crates restate some of these numbers, pinned by their own tests.
 - A loader that reports a too-large image as "could not spawn" hides `check_image`'s reason.
-- `window` keeps a provisional name until the first tag.
+- The names `VERSION` and `INTERFACE_ID` stay provisional until the first tag.
 
 ## Minimum Rust version
 
-Rust 1.88.
+Rust 1.88. To check it, run `rustup toolchain install 1.88`, then `cargo +1.88 build` and
+`cargo +1.88 test`. The weekly `msrv` job in CI runs the same build and tests at that version.
 
 ## License
 

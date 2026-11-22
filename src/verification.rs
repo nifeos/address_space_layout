@@ -1,4 +1,4 @@
-//! **Machine-checked proofs (Kani) of the user address-space map**: every address below the
+//! **Machine-checked proofs (Kani) of the user address-space layout**: every address below the
 //! code-model ceiling lies in exactly one band, whole pages and in address order; each band
 //! function accepts exactly the pages its doc allows; and [`check_image`] places exactly the images
 //! the image band holds. Behind `#[cfg(kani)]`, so only `cargo kani` compiles them.
@@ -6,7 +6,7 @@
 //!
 //! The constant facts (the bands tile `[0, CODE_MODEL_CEILING_VIRTUAL_ADDRESS)`, each page aligned, the ceiling a
 //! low-half address on every architecture) are also `const` asserts in `lib.rs`, where every
-//! consumer's build checks them. These harnesses state the same map per address, through
+//! consumer's build checks them. These harnesses state the same layout per address, through
 //! [`Band::contains`], which is what every band function and loader asks. So a falsification of a
 //! band constant has to delete the matching `const` assert too, or the build stops before Kani runs.
 
@@ -66,7 +66,7 @@ fn every_virtual_address_below_the_ceiling_lies_in_exactly_one_band() {
 }
 
 /// Falsification: replayable `falsifications/verification.the_bands_are_listed_in_virtual_address_order.patch`
-/// **[`BANDS`] is in address order**: of two addresses in the map, the lower one is never in a
+/// **[`BANDS`] is in address order**: of two addresses in the layout, the lower one is never in a
 /// later band. The names a message prints come from this order, and a reader takes the table as a
 /// picture of the address space.
 #[kani::proof]

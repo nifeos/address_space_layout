@@ -18,4 +18,14 @@ What a run is:
    not against the stranger.
 4. Record the date on the line below.
 
-Last run: none
+Last run: 2026-11-22
+
+Result of that run: a fresh agent with only the repository URL cloned `02d497b` and, from the
+README alone, reached a passing build, 10 unit tests and 3 documentation tests, the library on all
+three bare-metal targets, and all eleven Kani harnesses in about 14 seconds. It applied one
+falsification patch, saw its harness fail at the patch's assertion, and reverted it. At Rust 1.88,
+the stated minimum, the build and tests pass, and 1.87 refuses the crate. Kani and the targets were
+already installed, so the run could not show whether the install steps work. It found no false
+claim. It found five gaps, which the README now closes: how to run one harness, the module name in
+a patch's file name, what a falsified run prints, the passing harnesses that report expected
+panics, and how to check the minimum Rust version.

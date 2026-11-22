@@ -1,4 +1,4 @@
-//! **The user address-space map**: which band of a process's low half holds what, the same on all
+//! **The user address-space layout**: which band of a process's low half holds what, the same on all
 //! three architectures.
 //!
 //! The bands tile `[0, 2 GiB)` with no gap (a `const` assert holds that, and Kani proves it per
@@ -67,7 +67,7 @@
 #![forbid(unsafe_code)]
 
 /// The layout's version: the bands, the pair-page arithmetic and the fixed windows a loader and a
-/// kernel compile in from this crate, all one map. One constant for the whole layout; nothing
+/// kernel compile in from this crate, all one layout. One constant for the whole layout; nothing
 /// checks it at run time, and a program's declaration of the interfaces it links names it.
 pub const VERSION: u32 = 1;
 
@@ -129,7 +129,7 @@ impl Band {
 
 /// **The highest address a static `x86_64` image may reach.** See the crate docs: `code-model:
 /// small` with a static relocation model puts every symbol under 2 GiB. The image band ends at or
-/// below this, and every band on the map lies under it.
+/// below this, and every band in the layout lies under it.
 pub const CODE_MODEL_CEILING_VIRTUAL_ADDRESS: u64 = 0x8000_0000;
 
 /// **Nothing is ever mapped here**, so a null pointer, and a null pointer plus any offset under 2
@@ -337,8 +337,8 @@ impl core::fmt::Display for ImagePlacement {
 /// use address_space_layout::{check_image, pair_page, ImagePlacement, IMAGE, STACK};
 ///
 /// // A fixture's shared page is a pair page, checked at compile time.
-/// const CTL_VA: u64 = pair_page(0x60_0000);
-/// assert_eq!(CTL_VA, 0x60_0000);
+/// const CONTROL_PAGE: u64 = pair_page(0x60_0000);
+/// assert_eq!(CONTROL_PAGE, 0x60_0000);
 ///
 /// // An image that fits is placed; one that runs into the stack is told so, in those words.
 /// assert!(check_image(IMAGE.start, IMAGE.start + 0x29_c000).is_ok());
