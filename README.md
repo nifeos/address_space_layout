@@ -84,10 +84,9 @@ cargo kani --harness verification::pair_page_accepts_every_page_of_its_band --ex
 git checkout -- src
 ```
 
-The second command is the expected red: it ends with `VERIFICATION:- FAILED` and
-`Complete - 0 successfully verified harnesses, 1 failures, 1 total.`, and above them it names the
-failed check, here `a window must lie wholly inside its band`. The third command reverts the
-patch; revert each one before the next.
+The second command is the expected red. It names the failed check, here `a window must lie wholly
+inside its band`, and ends with `VERIFICATION:- FAILED` and a summary of 0 verified harnesses and
+1 failure. The third command reverts the patch; revert each one before the next.
 
 Not proven: that two windows in one band do not overlap. The crate that places them asserts that.
 
