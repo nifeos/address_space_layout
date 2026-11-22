@@ -59,7 +59,7 @@ println!("{refusal}");
 Eleven Kani harnesses state the layout per address and per window:
 
 - `every_virtual_address_below_the_ceiling_lies_in_exactly_one_band`: every address below 2 GiB is in one
-  band and no address above it is in any, each band is page aligned, and the whole map lies in the
+  band and no address above it is in any, each band is page aligned, and the whole layout lies in the
   user half of all three architectures.
 - `the_bands_are_listed_in_virtual_address_order`: `BANDS` is in address order.
 - `pair_page_accepts_every_page_of_its_band`, `runtime_window_accepts_every_page_of_its_band` and
@@ -128,7 +128,7 @@ usual way to get one) and a git checkout. From the crate root:
   randomizing system offers an attacker's guess.
 - Other crates restate some of these numbers, pinned by their own tests.
 - A loader that reports a too-large image as "could not spawn" hides `check_image`'s reason.
-- `window` keeps a provisional name until the first tag.
+- The names `VERSION` and `INTERFACE_ID` stay provisional until the first tag.
 
 ## Minimum Rust version
 
