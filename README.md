@@ -1,9 +1,9 @@
 # address_space_layout
 
-[![check](https://github.com/nifeos/address_space_layout/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/nifeos/address_space_layout/actions/workflows/ci.yml?query=branch%3Amain)
-[![proofs](https://github.com/nifeos/address_space_layout/actions/workflows/proofs.yml/badge.svg?branch=main)](https://github.com/nifeos/address_space_layout/actions/workflows/proofs.yml?query=branch%3Amain)
-[![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](https://github.com/nifeos/address_space_layout#license)
-[![minimum Rust version](https://img.shields.io/badge/rust-1.88%2B-blue.svg)](https://github.com/nifeos/address_space_layout/blob/main/Cargo.toml)
+[![check](https://github.com/partsfoundry/address_space_layout/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/partsfoundry/address_space_layout/actions/workflows/ci.yml?query=branch%3Amain)
+[![proofs](https://github.com/partsfoundry/address_space_layout/actions/workflows/proofs.yml/badge.svg?branch=main)](https://github.com/partsfoundry/address_space_layout/actions/workflows/proofs.yml?query=branch%3Amain)
+[![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](https://github.com/partsfoundry/address_space_layout#license)
+[![minimum Rust version](https://img.shields.io/badge/rust-1.88%2B-blue.svg)](https://github.com/partsfoundry/address_space_layout/blob/main/Cargo.toml)
 
 Which band of a process's low half holds what. Eight bands tile the first 2 GiB, the same on
 aarch64, riscv64 and x86_64, and `const fn` checks stop the build when a page or a window lies
